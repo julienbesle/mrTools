@@ -139,7 +139,7 @@ if isfield(mrDEFAULTS.prefs,pref)
 else
   % not set yet, take the top most possibility in the default
   % list, otherwise return empty
-  if ~isempty(prefNum) && ~isempty(prefDefaults{prefNum})
+  if ~isempty(prefNum) && (~isempty(prefDefaults{prefNum}) || ischar(prefDefaults{prefNum}))
     if iscell(prefDefaults{prefNum})
       value = prefDefaults{prefNum}{1};
     else
