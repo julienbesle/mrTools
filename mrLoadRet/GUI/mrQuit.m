@@ -95,4 +95,6 @@ clear global MLR
 % revert paths to what they were from before running mrTools
 mlrPath revert
 
-
+% close confirmation to console and returns command prompt to console
+disp('(mrQuit) Closed');
+drawnow;
