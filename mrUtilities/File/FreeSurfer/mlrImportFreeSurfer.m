@@ -38,10 +38,6 @@ end
 eval(evalargs(varargin));
 if ieNotDefined('defaultParams'),defaultParams = 0;end
 
-% check directories
-if ~isdir('surf'),disp(sprintf('(mlrImportFreeSurfer) Could not find surf directory'));return,end
-if ~isdir('mri'),disp(sprintf('(mlrImportFreeSurfer) Could not find mri directory'));return,end
-
 if ieNotDefined('baseName'), baseName = getLastDir(pwd);end
 
 wmFile    = 'smoothwm';
@@ -51,7 +47,12 @@ curvFile  = 'curv';
 anatFile  = 'T1.mgz';
 hemi      = {'lh', 'rh'};
 hemiNames = {'left', 'right'};
-outDir    = fullfile(pwd,'surfRelax');
+if ~exist('freeSurferDir')
+  freeSurferDir = pwd;
+end
+if ~exist('outdir')
+  outDir = fullfile(freeSurferDir,'surfRelax');
+end
 if ~exist('volumeCropSize')
   volumeCropSize = [176 256 256];
 end
@@ -61,7 +62,7 @@ if ~exist('pixelSize')
 end
 
 paramsInfo = {...
-    {'freeSurferDir',pwd,'directory where the freeSurfer files live'}, ...
+    {'freeSurferDir',freeSurferDir,'directory where the freeSurfer files live'}, ...
     {'outDir', outDir,'directory that OFF surfaces will be written to'}, ...
     {'wmFile', wmFile, 'name of the surface defining the white/gray boundary'}, ...
     {'gmFile', gmFile, 'name of the surface defining the gray/pial boundary'}, ...
@@ -87,8 +88,12 @@ if isempty(params)
   return
 end
 
-if ~isdir(outDir)
-  mkdir(outDir);
+% check directories
+if ~isfolder(fullfile(freeSurferDir,'surf')),fprintf('(mlrImportFreeSurfer) Could not find surf directory\n');return,end
+if ~isfolder(fullfile(freeSurferDir,'mri')),fprintf('(mlrImportFreeSurfer) Could not find mri directory\n');return,end
+
+if ~isfolder(params.outDir)
+  mkdir(params.outDir);
 end
 
 
