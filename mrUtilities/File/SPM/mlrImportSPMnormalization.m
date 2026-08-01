@@ -24,7 +24,7 @@ if ieNotDefined('overwrite')
 end
 
 if ieNotDefined('studyDir') || ieNotDefined('subjectNames') % if the function is called without input, use the current folder
-  [studyDir,subjectNames] = fileparts(pwd);
+  [studyDir,subjectNames] = mrFileParts(pwd);
 end
 
 if ischar(subjectNames)

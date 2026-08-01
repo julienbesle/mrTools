@@ -1046,7 +1046,7 @@ function save
 global gSurfViewer
 filename = sprintf('%s_modified%s',stripext(gSurfViewer.anat.filename),mrGetPref('niftiFileExtension'));
 disp(sprintf('(mrSurfViewer) Saving volume as %s',filename));
-cbiWriteNifti(filename,gSurfViewer.anat.data,gSurfViewer.anat.hdr);
+mlrImageWriteNifti(filename,gSurfViewer.anat.data,gSurfViewer.anat.hdr);
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %    getMouseCoords    %

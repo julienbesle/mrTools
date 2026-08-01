@@ -290,7 +290,7 @@ for scanNum = params.scanNum
 end
 toc
 % keyboard
-[pathname homedir] = fileparts(viewGet(view,'homedir'));
+[pathname homedir] = mrFileParts(viewGet(view,'homedir'));
 if params.SVM
     figure('name',[homedir ': ''tuning curves'' for Support Vector Machine'])
     for s = 1:length(params.scanNum)

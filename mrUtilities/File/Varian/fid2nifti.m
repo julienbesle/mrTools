@@ -222,7 +222,7 @@ for i = 1:length(fidnames)
       outputName = setext(outputName,mrGetPref('niftiFileExtension'));
     end
     disp(sprintf('(fid2nifti) Converting %s to %s',fidname,outputName));
-    cbiWriteNifti(outputName,fid.data,hdr);
+    mlrImageWriteNifti(outputName,fid.data,hdr);
     outputName = [];
   else
     outhdr{i} = hdr;

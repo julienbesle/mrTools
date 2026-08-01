@@ -138,9 +138,9 @@ for iSide=1:2
       subjSurf.vtcs = tmpVtcs; % same mesh as subject's surface, but coordinates of the average surface
 
       %change file name
-      [path,filename,extension]=fileparts(subjSurf.filename);
+      [path,filename,extension]=mrFileParts(subjSurf.filename);
       subjSurf.filename = [path '/' filename '_' fsAverage extension];
-      [path,filename,extension]=fileparts(thisAverageSurf.filename);
+      [path,filename,extension]=mrFileParts(thisAverageSurf.filename);
       thisAverageSurf.filename = [path '/' filename '_' fssubjectPrefix extension];
 
       %save file

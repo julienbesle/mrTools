@@ -560,7 +560,7 @@ switch lower(param)
     if ieNotDefined('varargin')
       mrErrorDlg('(viewGet) scanNum: Must specify tseriesFileName.');
     end
-    [tseriesFilePath,tseriesFileName] = fileparts(varargin{1});
+    [tseriesFilePath,tseriesFileName] = mrFileParts(varargin{1});
     if length(varargin) > 1
       groupNums = viewGet(view,'groupNum',varargin{2});
       if isempty(groupNums)
@@ -573,7 +573,7 @@ switch lower(param)
     scanNumMatch = [];groupNumMatch = [];
     for groupNum = groupNums
       for scanNum = 1:length(MLR.groups(groupNum).scanParams)
-        [scanFilePath,scanFileName] = fileparts(MLR.groups(groupNum).scanParams(scanNum).fileName);
+        [scanFilePath,scanFileName] = mrFileParts(MLR.groups(groupNum).scanParams(scanNum).fileName);
         if strcmp(scanFileName,tseriesFileName)
           scanNumMatch(end+1) = scanNum;
           groupNumMatch(end+1) = groupNum;
@@ -672,7 +672,7 @@ switch lower(param)
   case {'concatinfo'}
     % concatInfo = viewGet(view,'concatInfo',[scanNum],[groupNum]);
     [s g] = getScanAndGroup(view,varargin,param);
-    [tseriesPath,tseriesFile] = fileparts(viewGet(view,'tseriesPath',s,g));
+    [tseriesPath,tseriesFile] = mrFileParts(viewGet(view,'tseriesPath',s,g));
     % check for mat file
     matFileName = fullfile(tseriesPath,sprintf('%s.mat',tseriesFile));
     if mlrIsFile(matFileName)
@@ -939,7 +939,7 @@ switch lower(param)
     % associated with the scan
     [s g] = getScanAndGroup(view,varargin,param);
     % create name of file, by putting -header.txt on to the filename
-    [tseriesPath,tseriesFile] = fileparts(viewGet(view,'tseriesPath',s,g));
+    [tseriesPath,tseriesFile] = mrFileParts(viewGet(view,'tseriesPath',s,g));
     dicomName{1} = fullfile(tseriesPath,sprintf('%s-header.txt',tseriesFile));
     % if the file does not exist, then check original
     if ~mlrIsFile(dicomName{1})
@@ -1007,7 +1007,7 @@ switch lower(param)
     % returns motion correction transformation matrices if they exists
     [s g] = getScanAndGroup(view,varargin,param);
     % get the tseries name
-    [tSeriesPath tSeriesName] = fileparts(viewGet(view,'tSeriesPathStr',s,g));
+    [tSeriesPath tSeriesName] = mrFileParts(viewGet(view,'tSeriesPathStr',s,g));
     if mlrIsFile(fullfile(tSeriesPath,sprintf('%s.mat',tSeriesName)))
       load(fullfile(tSeriesPath,sprintf('%s.mat',tSeriesName)));
       if exist('transforms') == 1
@@ -1019,7 +1019,7 @@ switch lower(param)
     % gets the .mat params file associated with this scan if it exists
     [s g] = getScanAndGroup(view,varargin,param);
     % get the tseries name
-    [tSeriesPath tSeriesName] = fileparts(viewGet(view,'tSeriesPathStr',s,g));
+    [tSeriesPath tSeriesName] = mrFileParts(viewGet(view,'tSeriesPathStr',s,g));
     if mlrIsFile(fullfile(tSeriesPath,sprintf('%s.mat',tSeriesName)))
       val = load(fullfile(tSeriesPath,sprintf('%s.mat',tSeriesName)));
     end

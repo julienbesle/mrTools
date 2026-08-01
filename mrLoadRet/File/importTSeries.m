@@ -29,7 +29,7 @@ if ieNotDefined('defaultParams'),defaultParams = 0;end
 
 if ieNotDefined('params')
   if ~ieNotDefined('pathname')
-    [pathname,filename,ext]=fileparts(pathname);
+    [pathname,filename,ext]=mrFileParts(pathname);
     filename = [filename,ext];
   else
     if defaultParams
@@ -64,8 +64,8 @@ weirdFramePeriods = 0;
 
 for iFile = 1:length(filename)
   
-  if ~isempty(strfind(stripext(filename{iFile}),'.')) && isempty(strfind(filename{iFile},'.nii.gz')) %make an exception for gziped NIFTI files
-    [~,name,extension] = fileparts(filename{iFile});
+  if contains(stripext(filename{iFile}),'.')
+    [~,name,extension] = mrFileParts(filename{iFile});
     mrWarnDlg(sprintf('(importTSeries) Ignoring file %s because it has a . in the filename that does not mark the file extension. If you want to use this file, consider renaming to %s',filename{iFile},setext(fixBadChars(name,{'.','_'}),extension)));
   else
 

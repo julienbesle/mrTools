@@ -124,7 +124,7 @@ if exist([pathStr,'.mat'],'file')
 end
 if strcmp(saveFlag,'Yes')
   fprintf('(saveAnat) Saving %s...',pathStr);
-  [byteswritten,hdr] = cbiWriteNifti(pathStr,data,hdr,'float32');
+  [byteswritten,hdr] = mlrImageWriteNifti(pathStr,data,hdr,'float32');
   % also write out the base structure as a .mat file
   eval(sprintf('save ''%s.mat'' base',stripext(pathStr)));
   fprintf('done\n');

@@ -632,10 +632,13 @@ if params.nOutputOverlays
           firstNonEmptyScan = iScan;
         end
       end
-      [bytes,hdr] = cbiWriteNifti(newPathStr,repmat(base.im,[1 1 size(outputData{firstNonEmptyScan},3)]),hdr);
+      [bytes,hdr] = mlrImageWriteNifti(newPathStr,repmat(base.im,[1 1 size(outputData{firstNonEmptyScan},3)]),hdr);
       % Add it
       scanParams.fileName = scanFileName;
       thisView = viewSet(thisView,'newScan',scanParams);
+    end
+    analysisNum = viewGet(thisView,'analysisNum','combineTransformOverlays');
+    if isempty(analysisNum)
       % create dummy analysis
       analysis.name = 'combineTransformOverlays';
       fprintf('(combineTransformOverlays) Creating Analysis %s.\n',analysis.name);
@@ -650,11 +653,15 @@ if params.nOutputOverlays
       analysis.date = datestr(now);
 %       analysis.clipAcrossOVerlays = 0; %this doesn't work
       thisView = viewSet(thisView,'newanalysis',analysis);
-      thisView = viewSet(thisView,'clipAcrossOverlays',0); %this doesn't work
-      
+    else
+      thisView = viewSet(thisView,'curAnalysis',analysisNum);
+    end
+    thisView = viewSet(thisView,'clipAcrossOverlays',0); %this doesn't work
+    if isempty(viewGet(thisView,'base',baseName))
       %if the base is a flat map, need to create a new volume flat map
       if viewGet(thisView,'basetype')==1
-        thisView = loadAnat(thisView,getLastDir(newPathStr),fileparts(newPathStr));
+        newPathStr = viewGet(thisView,'tseriesDir');
+        thisView = loadAnat(thisView,[baseName mrGetPref('niftiFileExtension')],viewGet(thisView,'tseriesDir'));
         saveAnat(thisView,getLastDir(newPathStr));
         thisView.baseVolumes(thisView.curBase).clip=[0 1]; %should add a viewSet case for this but I don't have time
         thisView = viewSet(thisView,'rotate',0); %this doesn't work

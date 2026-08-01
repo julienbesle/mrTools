@@ -125,13 +125,13 @@ end
 if fieldIsNotDefined(params,'destVol')
   params.destVol = cell(size(params.sourceVol));
 elseif ischar(params.destVol)
-  [~,~,extension] = fileparts(params.destVol);
+  [~,~,extension] = mrFileParts(params.destVol);
   if isempty(extension)
     % we assume it is a suffix to add to the source vol name
     destSuffix = params.destVol;
     params.destVol = cell(1,nSources);
     for iSource = 1:nSources
-      [path,file,extension] = fileparts(params.sourceVol{iSource});
+      [path,file,extension] = mrFileParts(params.sourceVol{iSource});
       params.destVol{iSource}=[path,file,destSuffix,extension];
     end
   else
@@ -340,7 +340,7 @@ for iSource = 1:nSources
   end
   % write out the data
   if isempty(params.destVol{iSource})
-    [path,file,extension] = fileparts(params.sourceVol{iSource});
+    [path,file,extension] = mrFileParts(params.sourceVol{iSource});
     [filename,pathname] = uiputfile(fullfile(path,[file '_' params.fsDestSubj extension]),'Volume save name');
     if ~isnumeric(filename)
       params.destVol{iSource} = fullfile(pathname,filename);

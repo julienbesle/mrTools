@@ -78,9 +78,9 @@ switch (ext)
   hdr.magic=sprintf('%s\0','ni1');
   hdr.vox_offset=0; % important!
  case '.gz','.Z' % zipped
-  mrErrorDlg('No support for zipped NIFTI-1 format under Matlab.');
+  mrErrorDlg('(cbiWriteNifti) No support for zipped NIFTI-1 format under Matlab.');
  otherwise
-  mrErrorDlg('Not a valid NIFTI-1 file name extension. Legal values are .nii, .hdr, .img');
+  mrErrorDlg('(cbiWriteNifti) Not a valid NIFTI-1 file name extension. Legal values are .nii, .hdr, .img');
 end
 
 % deal with subset and append options
@@ -90,7 +90,7 @@ for n=1:4
   if (length(subset{n})==1)
     subsetIndices(n,:)=[subset{n} subset{n}];
   elseif (length(subset{n})>2)
-    mrErrorDlg('subset should be a scalar or 2-vector');
+    mrErrorDlg('(cbiWriteNifti) subset should be a scalar or 2-vector');
   elseif (isempty(subset{n}))
     subsetIndices(n,:)=[1 dataSize(n)];
   else
@@ -110,9 +110,9 @@ if ~isequal(subsetIndices,[ones(4,1) dataSize']) % if writing a subset or append
   hdrDestDim =  hdrDestination.dim(2:5);
   hdrDestDim(hdrDestDim==0)=1;
   if ~isequal(subsetIndices(1:2,:),[ones(2,1) hdrDestDim(1:2)])
-    mrErrorDlg('no support for saving subvolumes of data on x and y dimensions; only entire z-slices or volumes may be saved.');
+    mrErrorDlg('(cbiWriteNifti) no support for saving subvolumes of data on x and y dimensions; only entire z-slices or volumes may be saved.');
   elseif subsetIndices(3,2)>hdrDestDim(3)
-    mrErrorDlg('z subset index larger than file image dimensions!');
+    mrErrorDlg('(cbiWriteNifti) z subset index larger than file image dimensions!');
   elseif subsetIndices(4,2)>hdrDestDim(4) && subsetIndices(4,1)-hdrDestDim(4)~=1
     mrErrorDlg('(cbiWriteNifti) When appending data on the 4th dimension, the first frame index must be exactly adjacent to the last frame in the file');
   end
@@ -152,10 +152,10 @@ headerdim=hdr.dim(2:5); % Matlab 1-offset - hdr.dim(1) is actually hdr.dim(0)
 headerdim(headerdim==0)=1; % Force null dimensions to be 1
 if (hdr.dim(6)>1)
   if (hdr.dim(5)>1)
-    mrErrorDlg('No support for 5D data with multiple time points!');
+    mrErrorDlg('(cbiWriteNifti) No support for 5D data with multiple time points!');
   end
   headerdim(4)=hdr.dim(6);
-  if verbose, disp('5D data set detected');end
+  if verbose, disp('(cbiWriteNifti) 5D data set detected');end
 end
 
 writeFormat=hdr.matlab_datatype;
@@ -167,9 +167,9 @@ switch (hdr.matlab_datatype)
  case 'complex128'
   writeFormat=float64;
  case 'RGB'
-  mrErrorDlg('No support for RGB data');
+  mrErrorDlg('(cbiWriteNifti) No support for RGB data');
  case {'complex256','float128'}
-  mrErrorDlg('No support for 128-bit data on this platform!');
+  mrErrorDlg('(cbiWriteNifti) No support for 128-bit data on this platform!');
 end
 bytesPerElement=cbiSizeofNifti(writeFormat);
 
@@ -181,7 +181,7 @@ if (~hdr.single_file)
     permission = 'wb';
   end
   fid=fopen(hdr.img_name,permission,hdr.endian);
-  if fid == -1,mrErrorDlg(sprintf('(cbiWriteNiftiHeader) Could not open file %s',fname));end
+  if fid == -1,mrErrorDlg(sprintf('(cbiWriteNifti) Could not open file %s',fname));end
 end
 
 try
@@ -191,7 +191,7 @@ try
     %  fwrite(fid,0,sprintf('integer*%d',(hdr.vox_offset-ftell(fid))));
     c=hdr.vox_offset-ftell(fid);
     if (fwrite(fid,zeros(c,1),'uint8')~=c)
-      mrErrorDlg('error writing extension padding')
+      mrErrorDlg('(cbiWriteNifti) error writing extension padding')
     end
   end
 
@@ -263,7 +263,7 @@ function [data,hdr]=convertData(data,hdr,short_nan)
 % Calculate scale factor for non-floating point data
   switch (hdr.matlab_datatype)    
    case 'binary'
-    mrErrorDlg('unsupported format')
+    mrErrorDlg('(cbiWriteNifti) unsupported format')
    case 'uint8'
     MAXINT=2^8-1;
    case {'uint16','ushort'}

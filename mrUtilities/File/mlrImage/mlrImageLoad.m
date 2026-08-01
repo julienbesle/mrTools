@@ -118,10 +118,10 @@ for iImage = 1:nImages
 	end
       end
       volNum = [];
-     case {'gz'}
+     case {'nii.gz'}
       % make sure this is actually a nifti file that has been compressed
       % by checking the filename should be: filename.nii.gz
-      uncompressedFilename = stripext(filename);
+      uncompressedFilename = filename(1:end-3);
       if ~any(strcmp(getext(uncompressedFilename),{'nii'}))
 	disp(sprintf('(mlrImageLoad) File %s does not appear to be a compressed nifti file (which should have extensions like: filename.nii.gz)',filename));
 	data = [];

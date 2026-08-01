@@ -66,7 +66,7 @@ if isempty(filetype)
 end
 
 % get name of surface from filename
-[~,surfaceName] = fileparts(filename);
+[~,surfaceName] = mrFileParts(filename);
 surfaceName = stripext(surfaceName);
 
 % make sure we have a recognized extension

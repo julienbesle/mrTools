@@ -1100,7 +1100,7 @@ if ~exist(pathStr,'file')
 end
 
 % Copy the nifti file to the tseries directory
-[dir,file,ext] = fileparts(pathStr);
+[dir,file,ext] = mrFileParts(pathStr);
 if strcmp(dir,tseriesDir)
     % If tseries file is already in the tseries directory, then use it
     hdr = mlrImageReadNiftiHeader(pathStr);
@@ -1110,7 +1110,7 @@ else
     fileName = ['tseries-',datestr(now,'mmddyy-HHMMSS'),mrGetPref('niftiFileExtension')];
     [data,hdr] = mlrImageReadNifti(pathStr);
     newPathStr = fullfile(tseriesDir,fileName);
-    [bytes,hdr] = cbiWriteNifti(newPathStr,data,hdr);
+    [bytes,hdr] = mlrImageWriteNifti(newPathStr,data,hdr);
 end
 
 % Add it
@@ -1266,7 +1266,7 @@ if ~exist(pathStr,'file')
 end
 
 % Copy the nifti file to the tseries directory
-[dir,file,ext] = fileparts(pathStr);
+[dir,file,ext] = mrFileParts(pathStr);
 if strcmp(dir,etcDir)
     % If stimfile is already in the Etc directory
     fileName = [file,ext];

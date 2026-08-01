@@ -219,9 +219,9 @@ for iRoi = 1:length(roiNum)
         [d, h] = mlrImageOrient(b.originalOrient,d,h);
         % convert back to nifti
         reorientedHdr = mlrImageGetNiftiHeader(h);
-        cbiWriteNifti(saveFilename{iRoi},d,reorientedHdr);
+        mlrImageWriteNifti(saveFilename{iRoi},d,reorientedHdr);
       else
-        cbiWriteNifti(saveFilename{iRoi},d,hdr);
+        mlrImageWriteNifti(saveFilename{iRoi},d,hdr);
       end
     end
   end

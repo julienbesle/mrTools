@@ -17,7 +17,7 @@ function [view,filename] = saveNewTSeries(view,tseries,scanParams,hdr,makeLink,o
 % Chooses between .img and .nii based on 'niftiFileExtension' preference.
 %
 % hdr: template for nifti header. The header is always passed through
-% cbiCreateNiftiHeader to ensure consistency with the data. Default: [];
+% mlrImageWriteNiftiHeader to ensure consistency with the data. Default: [];
 %
 % makeLink: Optional, if tseries is passed as a filename then setting
 % this to 1 will cause the tseries to be linked rather than copied
@@ -69,7 +69,7 @@ if ischar(tseries)
   hdr = mlrImageReadNiftiHeader(tseries);
   nFrames = hdr.dim(5);
 else
-  [byteswritten,hdr] = cbiWriteNifti(path,single(tseries),hdr,'float32');
+  [byteswritten,hdr] = mlrImageWriteNifti(path,single(tseries),hdr,'float32');
   nFrames = size(tseries,4);
 end
 

@@ -131,7 +131,7 @@ thisView = viewSet(thisView,'curGroup',params.groupNum);
 compatibleLogfile = true;
 for iScan = 1:length(params.scanList)
   tseriesPath{iScan} = viewGet(thisView,'tseriespathstr',params.scanList(iScan));
-  hdr{iScan} = cbiReadNiftiHeader(tseriesPath{iScan});
+  hdr{iScan} = mlrImageReadNiftiHeader(tseriesPath{iScan});
   for iFactor = 1:length(params.factors)
     % check that the field exists for this scan
     if ~isfield(factors{iScan},params.factors{iFactor})
@@ -224,7 +224,7 @@ for iScan = 1:viewGet(thisView,'nScans')
           dLevel = dLevel+1;
           mrWaitBar( dLevel/nnzContrastLevels, hWaitBar);
           for iVolume = find(ismember(whichOverlay{cScan}(:,iFactor),cLevel,'rows'))' %for each volume in the scan matching this (combination of) condition(s)
-            data = cbiReadNifti(tseriesPath{cScan},{[],[],[],iVolume},'double'); % read the data
+            data = mlrImageReadNifti(tseriesPath{cScan},{[],[],[],iVolume},'double'); % read the data
             isNotNaN = ~isnan(data);
             % add non-NaN values to the appropriate overlay(s)
             levelsData(isNotNaN,dLevel) = levelsData(isNotNaN,dLevel) + data(isNotNaN);

@@ -107,7 +107,7 @@ for iImage = 1:nImages
       end
      case {'hdr','nii'}
       header = mlrImageHeaderLoadNifti(filename,header);
-     case {'gz'}
+     case {'nii.gz'}
       header = mlrImageHeaderLoadCompressedNifti(filename,header);
      case {'sdt','spr','edt','epr'}
       header = mlrImageHeaderLoadSDT(filename,header);
@@ -285,7 +285,7 @@ header = [];
 
 % make sure this is actually a nifti file that has been compressed
 % by checking the filename
-uncompressedFilename = stripext(filename);
+uncompressedFilename = filename(1:end-3);
 if ~any(strcmp(getext(uncompressedFilename),{'nii'}))
   disp(sprintf('(mlrImageHeaderLoadCompressedNifti) File %s does not appear to be a compressed nifti file (which should have extensions like: filename.nii.gz)',filename));
   return

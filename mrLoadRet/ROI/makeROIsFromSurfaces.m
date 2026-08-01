@@ -63,7 +63,7 @@ if fieldIsNotDefined(params,'surfaceName')
   end
 end
 if fieldIsNotDefined(params,'names') % name of the ROIs.
-  [~,roiBaseName] = fileparts(params.surfaceName); % remove .off extension
+  [~,roiBaseName] = mrFileParts(params.surfaceName); % remove .off extension
   roiBaseName = fixBadChars(roiBaseName);
   params.names{1} = [roiBaseName '_gm'];
   params.names{2} = [roiBaseName '_wm'];

@@ -33,7 +33,7 @@ end
 
 % check for compressed file
 compressFile = false;
-if strcmp(ext,'gz')
+if strcmp(ext,'nii.gz')
   compressFile = true;
   % need to uncompress the file (so that we can just write the header)
   if mlrIsFile(filename)
@@ -44,7 +44,7 @@ if strcmp(ext,'gz')
     end
   end
   % strip off the gz
-  filename = stripext(filename);
+  filename = filename(1:end-3);
   % get the extension
   ext = getext(stripext(filename));
   % if the extension is empty then, we should set it to nii

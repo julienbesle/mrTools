@@ -79,7 +79,7 @@ mlrDispPercent(-inf,'(mrFlatViewer) Loading surfaces');
 
 % load the flat
 if isstr(flat{1})
-  [flatPath flat{1}] = fileparts(sprintf('%s.off',stripext(flat{1})));
+  [flatPath flat{1}] = mrFileParts(sprintf('%s.off',stripext(flat{1})));
   flatdir = dir(fullfile(flatPath,'*.off'));
   gFlatViewer.path = flatPath;
 
@@ -108,11 +108,11 @@ elseif isfield(flat{1},'radius')
     anatomyFile=fullfile(flat{1}.path,anat{1});
   else
     anatomyFile=anat{1};
-    [~,anat{1},ext] = fileparts(anat{1}); %remove the path from anat{1}
+    [~,anat{1},ext] = mrFileParts(anat{1}); %remove the path from anat{1}
     anat{1} = [anat{1} ext];
   end
   %first convert coordinates from current base to the surface base 
-  hdr= cbiReadNiftiHeader(anatomyFile);
+  hdr= mlrImageReadNiftiHeader(anatomyFile);
   baseStartPoint = hdr.sform44 \ viewGet(viewNum,'basexform') * [flat{1}.startPoint';1];
   array2worldXform = mlrXFormFromHeader(anatomyFile,'array2world');
   worldStartPoint = array2worldXform*baseStartPoint;

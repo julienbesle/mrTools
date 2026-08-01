@@ -126,7 +126,7 @@ end
 
 maxFrames=20;
 if fieldIsNotDefined(params,'nameFrame') && fieldIsNotDefined(params,'nameFrame1')
-  [~,filename,ext]=fileparts(params.pathname);
+  [~,filename,ext]=mrFileParts(params.pathname);
   filename = [filename ext];
   paramsInfo = {{'filename',filename,'editable=0','The name of the nifti file that you are importing'}};
   paramsInfo{end+1} = {'useSform',params.useSform,'type=checkbox',useSformEdit,'Whether to use the sForm rotation matrix. If yes, the overlay will be interpolated using its (sform) transformation relative to the destination scan(s). If not, the overlay''s original sform will be ignored and set to that of the destination scan(s)'};

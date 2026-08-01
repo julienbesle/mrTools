@@ -54,7 +54,7 @@ if ~isempty(baseCoordMap)
     % Aborted
     if isempty(innerCoordsFileName),return,end
     % get path and name
-    [baseCoordMapPath innerCoordsFileName] = fileparts(innerCoordsFileName);
+    [baseCoordMapPath innerCoordsFileName] = mrFileParts(innerCoordsFileName);
   end
   
   % Make flat structure
@@ -76,7 +76,7 @@ else
   % Aborted
   if isempty(innerCoordsFileName),return,end
   % get path and name
-  [flat.path flat.parentSurfaceName] = fileparts(innerCoordsFileName);
+  [flat.path flat.parentSurfaceName] = mrFileParts(innerCoordsFileName);
   % Make flat structure
   flat.startPoint = startPoint;
   flat.radius = defaultRadius;
@@ -280,7 +280,7 @@ if isempty(fileparts(params.anatFileName))
 else
   anatFileName = params.anatFileName;
 end
-hdr = cbiReadNiftiHeader(anatFileName);
+hdr = mlrImageReadNiftiHeader(anatFileName);
 voxelSize=hdr.pixdim(2:4);
 
 % run a modified version of the mrFlatMesh code

@@ -96,7 +96,7 @@ for iGroup = 1:viewGet(v, 'numberofGroups')
 	hdr.pixdim(5) = framePeriod*1000;
     %hdr.pixdim(5) = framePeriod;
 	% and write it back
-	hdr = cbiWriteNiftiHeader(hdr,filename);
+	hdr = mlrImageWriteNiftiHeader(hdr,filename);
 	% set the scan params
 	scanParams = viewGet(v,'scanParams',iScan,iGroup);
 	scanParams.framePeriod = framePeriod;

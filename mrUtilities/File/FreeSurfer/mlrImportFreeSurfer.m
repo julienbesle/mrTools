@@ -116,7 +116,7 @@ if mlrIsFile(anatFile)
     setenv('LD_LIBRARY_PATH', '/usr/pubsw/packages/tiffjpegglut/current/lib:/opt/local/lib:/usr/local/lib:/opt/local/lib')
     system(commandString);
     %read the dimensions
-    hdr = cbiReadNiftiHeader(outFile);
+    hdr = mlrImageReadNiftiHeader(outFile);
     volumeSize = hdr.dim(2:4);
     if all(iseven(volumeSize))
       %now run mri_convert again specifying the centre of the crop volume in the full volume
@@ -137,7 +137,7 @@ if mlrIsFile(anatFile)
   else
     if mlrIsFile(outFile)
       fprintf('\n(mlrImportFreesurfer) Getting voxel and volume dimensions from existing %s file\n', strcat(params.baseName, '_', 'mprage_pp', niftiExt));
-      hdr = cbiReadNiftiHeader(outFile);
+      hdr = mlrImageReadNiftiHeader(outFile);
       params.volumeCropSize = hdr.dim(2:4);
       fprintf('Voxel dimensions = %s\n',mat2str(hdr.pixdim(2:4)))
       fprintf('Volume dimensions = %s\n',mat2str(hdr.dim(2:4)))
@@ -161,11 +161,11 @@ if ~mlrIsFile(outFile)
 else
   pixelSize=hdr.pixdim(2:4);
 end
-%   h = cbiReadNiftiHeader(fullfile(params.outDir, strcat(params.baseName, '_', 'mprage_pp', niftiExt)));
+%   h = mlrImageReadNiftiHeader(fullfile(params.outDir, strcat(params.baseName, '_', 'mprage_pp', niftiExt)));
 %   h.qform44(1,4) = -(h.dim(2)-1)/2;
 %   h = cbiSetNiftiQform(h, h.qform44);
 %   h = cbiSetNiftiSform(h, h.qform44);
-%   cbiWriteNiftiHeader(h, fullfile(params.outDir, strcat(params.baseName, '_', 'mprage_pp', niftiExt)));
+%   mlrImageWriteNiftiHeader(h, fullfile(params.outDir, strcat(params.baseName, '_', 'mprage_pp', niftiExt)));
 
 % import the white and gray matter surface, as well as the inflated surface and curvature
 disp(sprintf('(mlrImportFreeSurfer) Converting FreeSurfer surfaces to OFF format'))
@@ -233,5 +233,5 @@ return;
 % h.qform44(1,4) = (h.dim(2)-1)/2;
 % h.qoffset_x = -1*(h.dim(2)-1)/2;
 % h.sform_code = 0;
-% cbiWriteNiftiHeader(h, sprintf(fullfile(params.outDir, strcat(params.baseName, '_', 'mprage_pp.hdr'))));
+% mlrImageWriteNiftiHeader(h, sprintf(fullfile(params.outDir, strcat(params.baseName, '_', 'mprage_pp.hdr'))));
 

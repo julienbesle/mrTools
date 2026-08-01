@@ -131,7 +131,7 @@ if ~ieNotDefined('inputIsFile') & ~ieNotDefined('hdr')
     
     % write the file
     fprintf('Saving %s...\n', outName);
-    [byteswritten,hdr] = cbiWriteNifti(outName, data, hdr);
+    [byteswritten,hdr] = mlrImageWriteNifti(outName, data, hdr);
         
 else
     % if input was not a file, return the upsampled data

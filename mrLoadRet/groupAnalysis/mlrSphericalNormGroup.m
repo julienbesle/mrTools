@@ -610,9 +610,9 @@ for iSubj = 1:nSubjects
             scanFileName{iGroup,2} = fullfile(templateTseriesFolder{iGroup},[templateScanName{iGroup,2} '.nii']);
           end
         end
-        [data,hdr] = cbiReadNifti(convertNames{iFile,1});
+        [data,hdr] = mlrImageReadNifti(convertNames{iFile,1});
         hdr.time_units = 'subjects/conditions'; % I dont think this is is doing anything
-        cbiWriteNifti(scanFileName{iGroup,1},data,hdr,'',{[],[],[],cNiftiConcat(iGroup,1)});
+        mlrImageWriteNifti(scanFileName{iGroup,1},data,hdr,'',{[],[],[],cNiftiConcat(iGroup,1)});
         % for log file
         if iGroup > nTemplateGroups && params.combineLeftAndRight % for the ROI group, add the side to the name if combining between left and right
           logfile{iGroup,1}.overlay{cNiftiConcat(iGroup,1),1} = [sides{params.subjectROIsides(iFile-nOverlays)} templateOverlayNewNames{iFile}];
@@ -638,7 +638,7 @@ for iSubj = 1:nSubjects
             reverseScanNum = 2;
           end
           cNiftiConcat(iGroup,normalScanNum) = cNiftiConcat(iGroup,normalScanNum)+1;
-          cbiWriteNifti(scanFileName{iGroup,normalScanNum},data,hdr,'',{[],[],[],cNiftiConcat(iGroup,normalScanNum)});
+          mlrImageWriteNifti(scanFileName{iGroup,normalScanNum},data,hdr,'',{[],[],[],cNiftiConcat(iGroup,normalScanNum)});
           logfile{iGroup,normalScanNum}.overlay{cNiftiConcat(iGroup,normalScanNum),1} = templateOverlayNewNames{iFile};
           logfile{iGroup,normalScanNum}.leftRightDirection{cNiftiConcat(iGroup,normalScanNum),1} = 'normal';
           logfile{iGroup,normalScanNum}.subject{cNiftiConcat(iGroup,normalScanNum),1} = params.mrLoadRetSubjectIDs{iSubj};
@@ -646,14 +646,14 @@ for iSubj = 1:nSubjects
             logfile{iGroup,normalScanNum}.hemisphere{cNiftiConcat(iGroup,normalScanNum),1} = sides{params.subjectROIsides(iFile-nOverlays)};
           end
           cNiftiConcat(iGroup,reverseScanNum) = cNiftiConcat(iGroup,reverseScanNum)+1;
-          [data,hdr] = cbiReadNifti(convertNames{iFile,2});
+          [data,hdr] = mlrImageReadNifti(convertNames{iFile,2});
           if iGroup <= nTemplateGroups
             if params.lrFlipTransform(iFile)
               data = params.lrFlipTransformFunctions{params.lrFlipTransform(iFile)}(data);
             end
           end
           hdr.time_units = 'subjects/conditions'; % I dont think this is is doing anything
-          cbiWriteNifti(scanFileName{iGroup,reverseScanNum},data,hdr,'',{[],[],[],cNiftiConcat(iGroup,reverseScanNum)});
+          mlrImageWriteNifti(scanFileName{iGroup,reverseScanNum},data,hdr,'',{[],[],[],cNiftiConcat(iGroup,reverseScanNum)});
           logfile{iGroup,reverseScanNum}.overlay{cNiftiConcat(iGroup,reverseScanNum),1} = templateOverlayNewNames{iFile};
           logfile{iGroup,reverseScanNum}.leftRightDirection{cNiftiConcat(iGroup,reverseScanNum),1} = 'reversed';
           logfile{iGroup,reverseScanNum}.subject{cNiftiConcat(iGroup,reverseScanNum),1} = params.mrLoadRetSubjectIDs{iSubj};
@@ -678,9 +678,9 @@ if ~params.dryRun
         fprintf('\n(mlrSphericalNormGroup) Cropping scan %d\n',iScan);
         cropBox = [inf -inf;inf -inf;inf -inf];
         croppedScanFileName = fullfile(templateTseriesFolder{iGroup},[templateScanName{iGroup,iScan} '_cropped.nii']);
-        scanHdr = cbiReadNiftiHeader(scanFileName{iGroup,iScan});
+        scanHdr = mlrImageReadNiftiHeader(scanFileName{iGroup,iScan});
         for iVolume = 1:scanHdr.dim(5)
-          data = cbiReadNifti(scanFileName{iGroup,iScan},{[],[],[],iVolume});
+          data = mlrImageReadNifti(scanFileName{iGroup,iScan},{[],[],[],iVolume});
           [X,Y,Z] = ind2sub(scanHdr.dim(2:4)',find(~isnan(data)&data~=0)); % can probably do better than this by finding main axes
           cropBox(:,1) = min(cropBox(:,1), floor([min(X);min(Y);min(Z)]));  % of coordinates by svd and applying rotation before cropping
           cropBox(:,2) = max(cropBox(:,2), floor([max(X);max(Y);max(Z)]));  % but this would involve resampling the data
@@ -691,8 +691,8 @@ if ~params.dryRun
         scanHdr.qform44 = cropXform\scanHdr.qform44;
         scanHdr.sform44 = cropXform\scanHdr.sform44;
         for iVolume = 1:scanHdr.dim(5)
-          data = cbiReadNifti(scanFileName{iGroup,iScan},{cropBox(1,:),cropBox(2,:),cropBox(3,:),iVolume});
-          cbiWriteNifti(croppedScanFileName,data,scanHdr,'',{[],[],[],iVolume});
+          data = mlrImageReadNifti(scanFileName{iGroup,iScan},{cropBox(1,:),cropBox(2,:),cropBox(3,:),iVolume});
+          mlrImageWriteNifti(croppedScanFileName,data,scanHdr,'',{[],[],[],iVolume});
         end
         movefile(croppedScanFileName,scanFileName{iGroup,iScan});
       end
@@ -717,7 +717,7 @@ if ~params.dryRun
     % load base anatomies:
     % load whole-head MPRAGE anatomy
     thisView = mrLoadRet(params.mrLoadRetTemplateLastView,'No GUI');
-    [fsPath,filename,ext] = fileparts(fsSphericalParamsOut.destSurfRelaxVolume);
+    [fsPath,filename,ext] = mrFileParts(fsSphericalParamsOut.destSurfRelaxVolume);
     thisView = loadAnat(thisView,[filename ext],fsPath);
     thisView = viewSet(thisView,'basesliceindex',3); %set to axial view
     thisView = viewSet(thisView,'rotate',90);

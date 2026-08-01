@@ -8,13 +8,15 @@
 %             is a base structure which contains info. These files
 %             can be loaded with mlrImageLoad
 %
-function retval = mlrImageSave(filename,data,h)
+function byteswritten = mlrImageSave(filename,data,h)
 
 % check arguments
 if ~any(nargin == [2 3])
   help mlrImageSave
   return
 end
+
+byteswritten = NaN;
 
 % check ext
 ext = getext(filename);
@@ -25,7 +27,7 @@ end
 
 % check for compressed file
 compressFile = false;
-if strcmp(ext,'gz')
+if strcmp(ext,'nii.gz')
   compressFile = true;
   % remove the file if it already exists
   if mlrIsFile(filename)
@@ -36,7 +38,7 @@ if strcmp(ext,'gz')
     end
   end
   % strip off the gz
-  filename = stripext(filename);
+  filename = filename(1:end-3);
   % get the extension
   ext = getext(stripext(filename));
   % if the extension is empty then, we should set it to nii
@@ -82,7 +84,7 @@ end
 switch (ext)
  case {'hdr','img','nii'}
   % write out nifti file
-  cbiWriteNifti(filename,data,hdr);
+  byteswritten = cbiWriteNifti(filename,data,hdr);
  case {'sdt','spr','edt','epr'}
   hdr.data = data;
   writesdt(filename,hdr);

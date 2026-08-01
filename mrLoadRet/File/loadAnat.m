@@ -1,7 +1,7 @@
-function [view anatFilePath] = loadAnat(view,anatFileName,anatFilePath,frameNum)
+function [view, anatFilePath] = loadAnat(view,anatFileName,anatFilePath,frameNum)
 %
 %        $Id$
-% view = loadAnat(view,[anatFileName],[anatFilePath])
+% view = loadAnat(view,[anatFileName],[anatFilePath],[frameNum])
 %
 % Loads an anatomy array and sets view.baseVolumes to include.
 %
@@ -11,7 +11,7 @@ function [view anatFilePath] = loadAnat(view,anatFileName,anatFilePath,frameNum)
 % shared directory for volume anatomy files.
 %
 % anatFilePath is the path of where to open up the dialog. This
-% will bey returned so that the GUI can open up in the same
+% will be returned so that the GUI can open up in the same
 % place each time.
 % 
 % frame (optional): if the volume is 4D, the frame number can be specified.
@@ -58,12 +58,12 @@ pathStr = cellArray(pathStr);
 for pathNum = 1:length(pathStr)
   % Check whether extension of the file is img or nii
   % matlab function "fileparts" takes the last .foo as extension!
-  [path,name,extension] = fileparts(pathStr{pathNum});
+  [path,name,extension] = mrFileParts(pathStr{pathNum});
   % set default extension, if extension not specified
   if isempty(extension)
     pathStr{pathNum} = setext(pathStr{pathNum},mrGetPref('niftiFileExtension'),0);
  % extension is not .nii or .img
-  elseif ~any(strcmp(extension,{'.nii', '.img', '.hdr','.gz'}))
+  elseif ~any(strcmp(extension,{'.nii', '.img', '.hdr','.nii.gz'}))
     mrWarnDlg(['(loadAnat) File type ',extension,' is not a valid anatomy file format']);
     return
   end

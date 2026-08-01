@@ -44,7 +44,7 @@ if ieNotDefined('pathStr'),return,end
 
 if isstr(pathStr)
   % get surface name using mrSurfViewer
-  [filepath filename] = fileparts(pathStr);
+  [filepath filename] = mrFileParts(pathStr);
   thispwd = pwd;
   if ~isempty(filepath),cd(filepath);end
   params1 = mrSurfViewer(filename);

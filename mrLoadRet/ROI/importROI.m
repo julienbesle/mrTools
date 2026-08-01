@@ -54,7 +54,7 @@ elseif justGetParams
   pathStr = 'none';
 end
 if isempty(pathStr),disp('No ROI selected');,return,end
-mrSetPref('importROIPath',fileparts(pathStr{1}));
+mrSetPref('importROIPath',mrFileParts(pathStr{1}));
 
 % get some info
 baseNum = viewGet(thisView,'currentBase');
@@ -109,7 +109,7 @@ switch(lower(params.from))
     for roinum = 1:length(pathStr)  % NB: if scripting, only one ROI can be imported at a time
       if ~justGetParams
         [data,hdr] = mlrImageLoad(pathStr{roinum});
-        [~,name] = fileparts(pathStr{roinum});
+        [~,name] = mrFileParts(pathStr{roinum});
 
         % make sure it has only 1 frame
         if hdr.nDim == 3
