@@ -3038,13 +3038,20 @@ switch lower(param)
     % n = viewGet(view,'currentAnalysis')
     val = view.curAnalysis;
   case{'analysisnum'}
-    % n = viewGet(view,'analysisNum',analysisName)
+    % n = viewGet(view,'analysisNum',analysisName,[groupNum])
     if ieNotDefined('varargin')
       mrErrorDlg('viewGet analysisNum: must specify analysisName');
     end
+    % if the user passed in group num, then that
+    % means to retrieve the analysis number for that group
+    if length(varargin) <= 1
+      groupNum = viewGet(view,'curGroup');
+    else
+      groupNum = varargin{2};
+    end
     analysisName = varargin{1};
     if ~isempty(view.analyses)
-      analysisNames = viewGet(view,'analysisnames');
+      analysisNames = viewGet(view,'analysisnames',groupNum);
       val = find(strcmp(analysisName,analysisNames));
     end
   case {'analysis'}
